@@ -2,17 +2,27 @@ import { users } from "../models/user.model.js";
 
 
 export const getAllUser = (req, res) => {
-    // const query = req.query;
-    // console.log(query);
     let filterUsers = users
     if (req.query.role) {
         filterUsers = users.filter((u) => {
             return u.role == req.query.role
         })
     }
-    if (req.query.age) {
+    let minAge = parseInt(req.query.minAge)
+    let maxAge = parseInt(req.query.maxAge)
+
+    if (minAge > maxAge) {
+        maxAge = minAge
+    }
+
+    if (req.query.minAge) {
         filterUsers = filterUsers.filter((u) => {
-            return u.age >= req.query.age
+            return u.age >= minAge
+        })
+    }
+    if (req.query.maxAge) {
+        filterUsers = filterUsers.filter((u) => {
+            return u.age <= maxAge
         })
     }
     return res.json(filterUsers)

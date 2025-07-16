@@ -4,6 +4,9 @@ import { createTeacher, deleteTeacherById, getAllTeacher, getTeacherById, update
 
 const teacherRoute = express.Router();
 
+/** Implement the following query
+ * /api/teacher?subject=English&minExp=5
+*/
 teacherRoute.get('/', getAllTeacher)
 teacherRoute.get('/:id', getTeacherById)
 teacherRoute.delete('/:id', deleteTeacherById)
