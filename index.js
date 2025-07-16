@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { users } from './sample.js';
 
 const app = express();
+// POST & PATCH & PUT
 app.use(bodyParser.json())
 
 /**
@@ -14,8 +15,8 @@ app.use(bodyParser.json())
  * GET /api/users
  * GET /api/users/{id}
  * DELETE /api/users/{id}
- * PATCH /api/users/{id}
- * POST /api/users/{id}
+ * PATCH /api/users/{id} 
+ * POST /api/users/{id} - If ID already exist - Not allowed, throw 400
  * 
  * GET /api/teachers
  * GET /api/teachers/{id}
@@ -56,6 +57,14 @@ app.delete('/api/users/:id', (req, res) => {
 })
 
 app.post('/api/users', (req, res) => {
+    const id = req.body.id
+    const existIndex = users.findIndex((u) => {
+        return u.id == id
+    })
+    console.log(existIndex)
+    if (existIndex != -1) {
+        return res.status(400).json({ message: "User exists" })
+    }
     users.push(req.body)
     return res.status(201).json({ message: `User with name: ${req.body.name} created` })
 })
