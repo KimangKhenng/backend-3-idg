@@ -1,16 +1,22 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import { users } from './sample.js';
 
 const app = express();
+app.use(bodyParser.json())
 
 /**
  * Exercise : Create 5 resources
  * GET /api/books
  * GET /api/books/{id}
  * DELETE /api/books/{id}
+ * 
  * GET /api/users
  * GET /api/users/{id}
  * DELETE /api/users/{id}
+ * PATCH /api/users/{id}
+ * POST /api/users/{id}
+ * 
  * GET /api/teachers
  * GET /api/teachers/{id}
  * DELETE /api/teachers/{id}
@@ -35,6 +41,35 @@ app.get('/api/users/:id', (req, res) => {
         return res.json({ messsge: "Not Found" })
     }
     return res.json(user)
+})
+
+app.delete('/api/users/:id', (req, res) => {
+    const userId = req.params.id
+    const deleteIndex = users.findIndex((u) => {
+        return u.id == userId
+    })
+    if (deleteIndex == -1) {
+        return res.json("User not found");
+    }
+    users.splice(deleteIndex, 1)
+    return res.json({ message: `User with Id ${userId} deleted` })
+})
+
+app.post('/api/users', (req, res) => {
+    users.push(req.body)
+    return res.status(201).json({ message: `User with name: ${req.body.name} created` })
+})
+
+app.patch('/api/users/:id', (req, res) => {
+    const userId = req.params.id
+    const userIndex = users.findIndex((u) => {
+        return userId == u.id
+    })
+    if (userIndex == -1) {
+        return res.json("User not found");
+    }
+    users[userIndex] = { id: userId, ...req.body }
+    return res.json({ message: `User with id ${userId} updated!` })
 })
 
 app.listen(3000, () => {
