@@ -7,13 +7,6 @@ const books = [
     { id: 3, title: "The Pragmatic Programmer", author: "Andrew Hunt", publishedYear: 1999 }
 ];
 
-// 👤 Users
-const users = [
-    { id: 101, name: "Alice", email: "alice@example.com", role: "member" },
-    { id: 102, name: "Bob", email: "bob@example.com", role: "admin" },
-    { id: 103, name: "Charlie", email: "charlie@example.com", role: "editor" }
-];
-
 // 🧑‍🏫 Teachers
 const teachers = [
     { id: 201, name: "Mr. Smith", subject: "Math", yearsOfExperience: 10 },
@@ -38,7 +31,6 @@ const stock = [
 // Export all
 export {
     books,
-    users,
     teachers,
     money,
     stock
