@@ -4,13 +4,9 @@ import { createUser, deleteUserById, getAllUser, getUserById, updateUesrById } f
 const userRoute = express.Router();
 
 userRoute.get('/', getAllUser)
-
 userRoute.get('/:id', getUserById)
-
 userRoute.delete('/:id', deleteUserById)
-
 userRoute.post('/', createUser)
-
 userRoute.patch('/:id', updateUesrById)
 
 export default userRoute;
