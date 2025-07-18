@@ -2,8 +2,8 @@ import { stockModel } from '../models/stock.model.js'
 /**
  * /api/stock?maxQuantity=20&minQuantity=10
  */
-export const getAllStock = (req, res) => {
-    let filterStocks = stock;
+export const getAllStock = async (req, res) => {
+    let filterStocks = await stockModel.find();
 
     if (req.query.minQuantity) {
         filterStocks = filterStocks.filter((s) => {
