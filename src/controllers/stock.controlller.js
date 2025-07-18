@@ -1,6 +1,8 @@
 import { stock } from "../models/stock.model.js";
 
-
+/**
+ * /api/stock?maxQuantity=20&minQuantity=10
+ */
 export const getAllStock = (req, res) => {
     return res.json(stock)
 }

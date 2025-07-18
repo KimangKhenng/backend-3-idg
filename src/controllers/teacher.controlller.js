@@ -3,7 +3,19 @@ import { teachers } from "../models/teacher.model.js";
 
 
 export const getAllTeacher = (req, res) => {
-    return res.json(teachers)
+    // return res.json(teachers);
+    let filterTeachers = teachers;
+    if (req.query.subject) {
+        filterTeachers = filterTeachers.filter((teacher) => {
+            return teacher.subject == req.query.subject
+        })
+    }
+    if (req.query.minYear) {
+        filterTeachers = filterTeachers.filter((teacher) => {
+            return teacher.yearsOfExperience >= req.query.minYear
+        })
+    }
+    return res.json(filterTeachers)
 }
 
 export const getTeacherById = (req, res) => {

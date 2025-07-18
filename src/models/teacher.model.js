@@ -1,3 +1,4 @@
+// api/teachers?subject=Math&minYear=5
 export const teachers = [
     { id: 201, name: "Mr. Smith", subject: "Math", yearsOfExperience: 10 },
     { id: 202, name: "Ms. Johnson", subject: "English", yearsOfExperience: 5 },
