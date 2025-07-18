@@ -48,9 +48,9 @@ export const deleteStockById = async (req, res) => {
     return res.status(204).json({ message: 'deleted', data: deleted })
 }
 
-export const updateStockById = (req, res) => {
+export const updateStockById = async (req, res) => {
     const userId = req.params.id
-    const result = stockModel.updateOne({ _id: userId }, req.body)
+    const result = await stockModel.updateOne({ _id: userId }, req.body)
     return res.status(200).json({ message: 'updated', data: result })
 }
 
