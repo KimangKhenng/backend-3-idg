@@ -1,5 +1,4 @@
-import { stock } from "../models/stock.model.js";
-
+import { stockModel } from '../models/stock.model.js'
 /**
  * /api/stock?maxQuantity=20&minQuantity=10
  */
@@ -72,15 +71,8 @@ export const updateStockById = (req, res) => {
     return res.json({ message: `Stock with id ${userId} updated!` })
 }
 
-export const createStock = (req, res) => {
-    const id = req.body.id
-    const existIndex = stock.findIndex((u) => {
-        return u.id == id
-    })
-    console.log(existIndex)
-    if (existIndex != -1) {
-        return res.status(400).json({ message: "Stock exists" })
-    }
-    stock.push(req.body)
-    return res.status(201).json({ message: `Stock with name: ${req.body.name} created` })
+export const createStock = async (req, res) => {
+    const stock = new stockModel(req.body)
+    await stock.save()
+    return res.status(201).json(stock)
 }
