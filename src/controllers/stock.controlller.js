@@ -4,8 +4,38 @@ import { stock } from "../models/stock.model.js";
  * /api/stock?maxQuantity=20&minQuantity=10
  */
 export const getAllStock = (req, res) => {
-    return res.json(stock)
-}
+    let filterStocks = stock;
+
+    if (req.query.minQuantity) {
+        filterStocks = filterStocks.filter((s) => {
+            return s.quantity >= req.query.minQuantity;
+        });
+    }
+
+    if (req.query.maxQuantity) {
+        filterStocks = filterStocks.filter((s) => {
+            return s.quantity <= req.query.maxQuantity;
+        });
+    }
+
+    if (req.query.minPrice) {
+        filterStocks = filterStocks.filter((s) => {
+            return s.price >= req.query.minPrice;
+        });
+    }
+
+    if (req.query.maxPrice) {
+        filterStocks = filterStocks.filter((s) => {
+            return s.price <= req.query.maxPrice;
+        });
+    }
+
+    if (filterStocks.length === 0) {
+        return res.status(404).json({ message: "Stock not found" });
+    }
+
+    return res.json(filterStocks);
+};
 
 export const getStockById = (req, res) => {
     const id = req.params.id;

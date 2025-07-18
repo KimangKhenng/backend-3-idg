@@ -7,3 +7,40 @@ export function teacherMiddleware(req, res, next) {
     }
     next()
 }
+
+export function stockMiddleware(req, res, next) {
+    const errors = []
+    let minQuantity = req.query.minQuantity;
+    let maxQuantity = req.query.maxQuantity;
+    let minPrice = req.query.minPrice;
+    let maxPrice = req.query.maxPrice;
+
+    if (minQuantity) {
+        minQuantity = parseInt(minQuantity)
+        if (isNaN(minQuantity)) {
+            errors.push({ error: 'minQuantity' })
+        }
+    }
+    if (maxQuantity) {
+        maxQuantity = parseInt(maxQuantity)
+        if (isNaN(maxQuantity)) {
+            errors.push({ error: 'maxQuantity' })
+        }
+    }
+    if (minPrice) {
+        minPrice = parseFloat(minPrice)
+        if (isNaN(minPrice)) {
+            errors.push({ error: 'minPrice' })
+        }
+    }
+    if (maxPrice) {
+        maxPrice = parseFloat(maxPrice)
+        if (isNaN(maxPrice)) {
+            errors.push({ error: 'maxPrice' })
+        }
+    }
+    if (errors.length > 0) {
+        return res.status(400).json(errors)
+    }
+    next()
+}
