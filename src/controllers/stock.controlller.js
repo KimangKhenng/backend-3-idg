@@ -36,39 +36,22 @@ export const getAllStock = async (req, res) => {
     return res.json(filterStocks);
 };
 
-export const getStockById = (req, res) => {
+export const getStockById = async (req, res) => {
     const id = req.params.id;
-    const user = stock.find((u) => {
-        return u.id == id
-    })
-    if (!user) {
-        return res.json({ messsge: "Not Found" })
-    }
-    return res.json(user)
+    const stock = await stockModel.findById(id)
+    return res.json(stock)
 }
 
-export const deleteStockById = (req, res) => {
-    const userId = req.params.id
-    const deleteIndex = stock.findIndex((u) => {
-        return u.id == userId
-    })
-    if (deleteIndex == -1) {
-        return res.json("Stock not found");
-    }
-    stock.splice(deleteIndex, 1)
-    return res.json({ message: `Stock with Id ${userId} deleted` })
+export const deleteStockById = async (req, res) => {
+    const id = req.params.id
+    const deleted = await stockModel.deleteOne({ _id: id })
+    return res.status(204).json({ message: 'deleted', data: deleted })
 }
 
 export const updateStockById = (req, res) => {
     const userId = req.params.id
-    const userIndex = stock.findIndex((u) => {
-        return userId == u.id
-    })
-    if (userIndex == -1) {
-        return res.json("Stock not found");
-    }
-    stock[userIndex] = { id: userId, ...req.body }
-    return res.json({ message: `Stock with id ${userId} updated!` })
+    const result = stockModel.updateOne({ _id: userId }, req.body)
+    return res.status(200).json({ message: 'updated', data: result })
 }
 
 export const createStock = async (req, res) => {
