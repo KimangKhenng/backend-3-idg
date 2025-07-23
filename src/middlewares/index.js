@@ -55,3 +55,7 @@ export function handleValidation(req, res, next) {
     }
     next()
 }
+
+export function handleError(error, req, res, next) {
+    return res.status(500).json({ message: error.message })
+}

@@ -1,8 +1,8 @@
 import { teacherModel } from "../models/teacher.model.js";
+import asyncHandler from 'express-async-handler'
 
 
-
-export const getAllTeacher = async (req, res) => {
+export const getAllTeacher = asyncHandler(async (req, res) => {
     // return res.json(teachers);
     let filterTeachers = await teacherModel.find().populate('courses');
     if (req.query.subject) {
@@ -16,32 +16,32 @@ export const getAllTeacher = async (req, res) => {
         })
     }
     return res.json(filterTeachers)
-}
+})
 
-export const getTeacherById = async (req, res) => {
+export const getTeacherById = asyncHandler(async (req, res) => {
     const id = req.params.id;
     const user = await teacherModel.findById(id)
     if (!user) {
         return res.json({ messsge: "Not Found" })
     }
     return res.json(user)
-}
+})
 
-export const deleteTeacherById = async (req, res) => {
+export const deleteTeacherById = asyncHandler(async (req, res) => {
     const userId = req.params.id
     const reesult = await teacherModel.deleteOne({ _id: userId })
     teachers.splice(deleteIndex, 1)
     return res.json({ message: reesult })
-}
+})
 
-export const updateTeacherById = (req, res) => {
+export const updateTeacherById = asyncHandler(async (req, res) => {
     const userId = req.params.id
-    const result = teacherModel.updateOne({ _id: userId }, req.body)
+    const result = await teacherModel.updateOne({ _id: userId }, req.body)
     return res.json({ message: result })
-}
+})
 
-export const createTeacher = async (req, res) => {
+export const createTeacher = asyncHandler(async (req, res) => {
     const teacher = new teacherModel(req.body)
     await teacher.save()
     return res.status(201).json({ message: `Teacher with name: ${teacher.name} created` })
-}
+})
