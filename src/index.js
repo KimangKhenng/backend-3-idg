@@ -6,6 +6,7 @@ import stockRoute from './routes/stock.route.js';
 import { dbConnect } from './database/db.js';
 import courseRoute from './routes/course.route.js';
 import { handleError } from './middlewares/index.js';
+import morgan from 'morgan';
 
 dbConnect().catch((err) => {
     console.log(err)
@@ -14,6 +15,7 @@ dbConnect().catch((err) => {
 const app = express();
 // POST & PATCH & PUT
 app.use(bodyParser.json())
+app.use(morgan('combined'))
 
 app.use('/api/users', userRoute);
 app.use('/api/teachers', teacherRoute);
