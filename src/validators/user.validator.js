@@ -1,4 +1,5 @@
 import { checkSchema } from "express-validator";
+import { userModel } from "../models/user.model.js";
 
 export const createUserValidator = checkSchema({
     name: {
@@ -8,7 +9,13 @@ export const createUserValidator = checkSchema({
         errorMessage: "Only letters and space allowed"
     },
     username: {
-        isAlpha: true
+        custom: {
+            options: async (value) => {
+                const user = await userModel.findOne({ username: value })
+                if (user)
+                    throw new Error(`Username: ${value} already exists`)
+            }
+        }
     },
     age: {
         isInt: {
@@ -20,7 +27,14 @@ export const createUserValidator = checkSchema({
         errorMessage: "Minimum age is 10, Maximum is 100"
     },
     email: {
-        isEmail: true
+        isEmail: true,
+        custom: {
+            options: async (value) => {
+                const user = await userModel.findOne({ email: value })
+                if (user)
+                    throw new Error(`Email: ${value} already in use`)
+            }
+        }
     },
     role: {
         isIn: {
