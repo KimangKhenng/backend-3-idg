@@ -1,10 +1,10 @@
-import { teachers } from "../models/teacher.model.js";
+import { teacherModel } from "../models/teacher.model.js";
 
 
 
-export const getAllTeacher = (req, res) => {
+export const getAllTeacher = async (req, res) => {
     // return res.json(teachers);
-    let filterTeachers = teachers;
+    let filterTeachers = await teacherModel.find().populate('courses');
     if (req.query.subject) {
         filterTeachers = filterTeachers.filter((teacher) => {
             return teacher.subject == req.query.subject
@@ -18,50 +18,30 @@ export const getAllTeacher = (req, res) => {
     return res.json(filterTeachers)
 }
 
-export const getTeacherById = (req, res) => {
+export const getTeacherById = async (req, res) => {
     const id = req.params.id;
-    const user = teachers.find((u) => {
-        return u.id == id
-    })
+    const user = await teacherModel.findById(id)
     if (!user) {
         return res.json({ messsge: "Not Found" })
     }
     return res.json(user)
 }
 
-export const deleteTeacherById = (req, res) => {
+export const deleteTeacherById = async (req, res) => {
     const userId = req.params.id
-    const deleteIndex = teachers.findIndex((u) => {
-        return u.id == userId
-    })
-    if (deleteIndex == -1) {
-        return res.json("Teacher not found");
-    }
+    const reesult = await teacherModel.deleteOne({ _id: userId })
     teachers.splice(deleteIndex, 1)
-    return res.json({ message: `Teacher with Id ${userId} deleted` })
+    return res.json({ message: reesult })
 }
 
 export const updateTeacherById = (req, res) => {
     const userId = req.params.id
-    const userIndex = teachers.findIndex((u) => {
-        return userId == u.id
-    })
-    if (userIndex == -1) {
-        return res.json("Teacher not found");
-    }
-    teachers[userIndex] = { id: userId, ...req.body }
-    return res.json({ message: `Teacher with id ${userId} updated!` })
+    const result = teacherModel.updateOne({ _id: userId }, req.body)
+    return res.json({ message: result })
 }
 
-export const createTeacher = (req, res) => {
-    const id = req.body.id
-    const existIndex = teachers.findIndex((u) => {
-        return u.id == id
-    })
-    console.log(existIndex)
-    if (existIndex != -1) {
-        return res.status(400).json({ message: "Teacher exists" })
-    }
-    teachers.push(req.body)
-    return res.status(201).json({ message: `Teacher with name: ${req.body.name} created` })
+export const createTeacher = async (req, res) => {
+    const teacher = new teacherModel(req.body)
+    await teacher.save()
+    return res.status(201).json({ message: `Teacher with name: ${teacher.name} created` })
 }
