@@ -23,6 +23,8 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: 'member'
     }
+}, {
+    timestamps: true
 })
 
 export const userModel = mongoose.model('Users', userSchema)

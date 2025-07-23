@@ -14,6 +14,8 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+}, {
+    timestamps: true
 });
 
 export const courseModel = mongoose.model("Courses", courseSchema);

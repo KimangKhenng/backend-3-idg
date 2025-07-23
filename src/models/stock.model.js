@@ -14,6 +14,8 @@ const stockSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'User'
     }
+}, {
+    timestamps: true
 })
 
 export const stockModel = mongoose.model('Stocks', stockSchema)
