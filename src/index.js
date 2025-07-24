@@ -7,12 +7,14 @@ import { dbConnect } from './database/db.js';
 import courseRoute from './routes/course.route.js';
 import { handleError } from './middlewares/index.js';
 import morgan from 'morgan';
+import cors from 'cors';
 
 dbConnect().catch((err) => {
     console.log(err)
 })
 
 const app = express();
+app.use(cors())
 // POST & PATCH & PUT
 app.use(bodyParser.json())
 app.use(morgan('combined'))

@@ -9,7 +9,7 @@ export const getAllTeacher = asyncHandler(async (req, res) => {
     const options = {
         page,
         limit,
-        populate
+        populate,
     };
     let filterTeachers = await teacherModel.paginate({}, options)
     return res.json(filterTeachers)
