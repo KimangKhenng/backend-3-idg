@@ -17,6 +17,7 @@
     "express-async-handler": "^1.2.0",
     "express-validator": "^7.2.1",
     "mongoose": "^8.16.4",
+    "mongoose-paginate-v2": "^1.9.1",
     "morgan": "^1.10.1"
   },
   "devDependencies": {

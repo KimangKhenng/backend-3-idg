@@ -3,18 +3,13 @@ import asyncHandler from 'express-async-handler'
 
 
 export const getAllTeacher = asyncHandler(async (req, res) => {
-    // return res.json(teachers);
-    let filterTeachers = await teacherModel.find().populate('courses');
-    if (req.query.subject) {
-        filterTeachers = filterTeachers.filter((teacher) => {
-            return teacher.subject == req.query.subject
-        })
-    }
-    if (req.query.minYear) {
-        filterTeachers = filterTeachers.filter((teacher) => {
-            return teacher.yearsOfExperience >= req.query.minYear
-        })
-    }
+    const limit = req.query.limit || 10
+    const page = req.query.page || 1
+    const options = {
+        page,
+        limit
+    };
+    let filterTeachers = await teacherModel.paginate({}, options)
     return res.json(filterTeachers)
 })
 

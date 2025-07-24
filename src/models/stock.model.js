@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const stockSchema = new mongoose.Schema({
     name: {
@@ -17,6 +18,7 @@ const stockSchema = new mongoose.Schema({
 }, {
     timestamps: true
 })
+stockSchema.plugin(mongoosePaginate)
 
 export const stockModel = mongoose.model('Stocks', stockSchema)
 

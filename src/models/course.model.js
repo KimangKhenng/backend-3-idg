@@ -1,5 +1,6 @@
 // api/teachers?subject=Math&minYear=5
 import mongoose from "mongoose";
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const courseSchema = new mongoose.Schema({
     title: {
@@ -18,5 +19,7 @@ const courseSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+courseSchema.plugin(mongoosePaginate)
 
 export const courseModel = mongoose.model("Courses", courseSchema);

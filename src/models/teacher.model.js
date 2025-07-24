@@ -1,5 +1,6 @@
 // api/teachers?subject=Math&minYear=5
 import mongoose from "mongoose";
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const teacherSchema = new mongoose.Schema({
     name: {
@@ -20,6 +21,8 @@ const teacherSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+teacherSchema.plugin(mongoosePaginate)
 
 export const teacherModel = mongoose.model("Teachers", teacherSchema);
 // export const teachers = [
