@@ -61,6 +61,7 @@ export function handleError(error, req, res, next) {
 }
 
 export function authenticate(req, res, next) {
+    // Verify JWT
     const token = req.headers.authorization.split(' ')[1]
     console.log(req.headers.authorization)
     if (token != 'abcz123cadt') {
