@@ -1,4 +1,7 @@
 import { validationResult } from 'express-validator'
+import jwt from 'jsonwebtoken'
+import asyncHandler from 'express-async-handler'
+import { userModel } from '../models/user.model.js';
 
 export function teacherMiddleware(req, res, next) {
     if (req.query.minYear) {
@@ -60,13 +63,16 @@ export function handleError(error, req, res, next) {
     return res.status(500).json({ message: error.message })
 }
 
-export function authenticate(req, res, next) {
+export const authenticate = asyncHandler(async (req, res, next) => {
     // Verify JWT
-    const token = req.headers.authorization.split(' ')[1]
-    console.log(req.headers.authorization)
-    if (token != 'abcz123cadt') {
-        return res.status(401).json({ message: "Unauthroized" })
+    // Bearer TOKEN
+    if (!req.headers.authorization) {
+        return res.status(400).json({ message: "No token provided" })
     }
+    const token = req.headers.authorization.split(' ')[1]
+    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    const user = await userModel.findById(payload._id)
+    req.user = user
     next()
-}
+})
 
