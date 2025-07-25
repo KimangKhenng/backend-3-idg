@@ -4,7 +4,15 @@ import asyncHandler from 'express-async-handler'
  * /api/stock?maxQuantity=20&minQuantity=10
  */
 export const getAllCourses = asyncHandler(async (req, res) => {
-    const courses = await courseModel.find();
+    const limit = req.query.limit || 10
+    const page = req.query.page || 1
+    const populate = req.query.populate || ''
+    const options = {
+        page,
+        limit,
+        populate,
+    };
+    const courses = await courseModel.paginate({}, options);
     return res.json(courses);
 });
 

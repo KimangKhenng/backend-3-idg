@@ -8,6 +8,7 @@ import courseRoute from './routes/course.route.js';
 import { handleError } from './middlewares/index.js';
 import morgan from 'morgan';
 import cors from 'cors';
+import authRoute from './routes/auth.route.js';
 
 dbConnect().catch((err) => {
     console.log(err)
@@ -23,6 +24,7 @@ app.use('/api/users', userRoute);
 app.use('/api/teachers', teacherRoute);
 app.use('/api/stocks', stockRoute);
 app.use('/api/courses', courseRoute);
+app.use('/api/auth', authRoute)
 
 app.use(handleError)
 

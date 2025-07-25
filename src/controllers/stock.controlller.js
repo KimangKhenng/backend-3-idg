@@ -4,35 +4,15 @@ import asyncHandler from 'express-async-handler'
  * /api/stock?maxQuantity=20&minQuantity=10
  */
 export const getAllStock = asyncHandler(async (req, res) => {
-    let filterStocks = await stockModel.find();
-
-    if (req.query.minQuantity) {
-        filterStocks = filterStocks.filter((s) => {
-            return s.quantity >= req.query.minQuantity;
-        });
-    }
-
-    if (req.query.maxQuantity) {
-        filterStocks = filterStocks.filter((s) => {
-            return s.quantity <= req.query.maxQuantity;
-        });
-    }
-
-    if (req.query.minPrice) {
-        filterStocks = filterStocks.filter((s) => {
-            return s.price >= req.query.minPrice;
-        });
-    }
-
-    if (req.query.maxPrice) {
-        filterStocks = filterStocks.filter((s) => {
-            return s.price <= req.query.maxPrice;
-        });
-    }
-
-    if (filterStocks.length === 0) {
-        return res.status(404).json({ message: "Stock not found" });
-    }
+    const limit = req.query.limit || 10
+    const page = req.query.page || 1
+    const populate = req.query.populate || ''
+    const options = {
+        page,
+        limit,
+        populate,
+    };
+    let filterStocks = await stockModel.paginate({}, options);
 
     return res.json(filterStocks);
 })
