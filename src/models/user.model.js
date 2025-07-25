@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'member'
+    },
+    password: {
+        type: String,
+        required: true
     }
 }, {
     timestamps: true
