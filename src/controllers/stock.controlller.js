@@ -19,7 +19,7 @@ export const getAllStock = asyncHandler(async (req, res) => {
 
 export const getStockById = asyncHandler(async (req, res) => {
     const id = req.params.id;
-    const stock = await stockModel.findById(id)
+    const stock = await stockModel.findById(id).populate('byUser')
     return res.json(stock)
 })
 
