@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import userRoute from './routes/user.route.js';
@@ -9,6 +11,7 @@ import { authenticate, handleError } from './middlewares/index.js';
 import morgan from 'morgan';
 import cors from 'cors';
 import authRoute from './routes/auth.route.js';
+
 
 dbConnect().catch((err) => {
     console.log(err)
