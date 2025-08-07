@@ -11,9 +11,14 @@ import { authenticate, handleError } from './middlewares/index.js';
 import morgan from 'morgan';
 import cors from 'cors';
 import authRoute from './routes/auth.route.js';
+import redisClient from './redis/index.js';
 
 
 dbConnect().catch((err) => {
+    console.log(err)
+})
+
+redisClient.connect().catch((err) => {
     console.log(err)
 })
 

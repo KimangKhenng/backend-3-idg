@@ -12,7 +12,16 @@ services:
     depends_on:
       - cadt-db
   cadt-db:
-    image: mongo:latest
+    image: mongo:8.0.12-noble
     container_name: cadt-db
     ports:
       - 27017:27017
+    volumes:
+      - cadt-db-data:/data/db
+  cadt-redis-cache:
+    image: redis:8.2.0-alpine
+    container_name: cadt-redis-cache
+    ports:
+      - 6379:6379
+volumes:
+  cadt-db-data:
