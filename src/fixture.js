@@ -23,6 +23,7 @@ for (let i = 0; i < numberOfUser; i++) {
         username: faker.internet.username(),
         email: faker.internet.email(),
         role: faker.helpers.arrayElement(["member", "admin", "editor"]),
+        password: faker.internet.password(),
         age: faker.number.int({ min: 10, max: 100 })
     })
     userIds.push(user._id)

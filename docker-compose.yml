@@ -1,0 +1,18 @@
+services:
+  cadt-express:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cadt-express
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+      - .env:/app/.env
+    depends_on:
+      - cadt-db
+  cadt-db:
+    image: mongo:latest
+    container_name: cadt-db
+    ports:
+      - 27017:27017
