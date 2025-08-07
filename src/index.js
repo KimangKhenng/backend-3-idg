@@ -7,7 +7,7 @@ import teacherRoute from './routes/teacher.route.js';
 import stockRoute from './routes/stock.route.js';
 import { dbConnect } from './database/db.js';
 import courseRoute from './routes/course.route.js';
-import { authenticate, handleError } from './middlewares/index.js';
+import { authenticate, CacheInterceptor, handleError } from './middlewares/index.js';
 import morgan from 'morgan';
 import cors from 'cors';
 import authRoute from './routes/auth.route.js';
@@ -28,10 +28,11 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(morgan('combined'))
 
-app.use('/api/users', authenticate, userRoute);
-app.use('/api/teachers', authenticate, teacherRoute);
-app.use('/api/stocks', authenticate, stockRoute);
-app.use('/api/courses', authenticate, courseRoute);
+
+app.use('/api/users', authenticate, CacheInterceptor(60 * 10), userRoute);
+app.use('/api/teachers', authenticate, CacheInterceptor(60 * 10), teacherRoute);
+app.use('/api/stocks', authenticate, CacheInterceptor(60 * 10), stockRoute);
+app.use('/api/courses', authenticate, CacheInterceptor(60 * 10), courseRoute);
 
 app.use('/api/auth', authRoute);
 

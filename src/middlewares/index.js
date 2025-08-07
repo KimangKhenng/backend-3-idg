@@ -2,6 +2,8 @@ import { validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 import asyncHandler from 'express-async-handler'
 import { userModel } from '../models/user.model.js';
+import redisClient from '../redis/index.js';
+import { responseHandler } from 'express-intercept';
 
 export function teacherMiddleware(req, res, next) {
     if (req.query.minYear) {
@@ -75,4 +77,16 @@ export const authenticate = asyncHandler(async (req, res, next) => {
     req.user = user
     next()
 })
+
+export const CacheInterceptor = (ttl) => responseHandler()
+    .for((req) => req.method == 'GET')
+    .if((res) => {
+        const codes = [200, 201, 202, 203, 204]
+        return codes.includes(res.statusCode);
+    }).getString((body, req, res) => {
+        const { originalUrl } = res.req
+        redisClient.set(originalUrl, body, {
+            EX: ttl // Cache for ttl seconds
+        })
+    })
 

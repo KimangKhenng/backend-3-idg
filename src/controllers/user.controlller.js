@@ -9,7 +9,7 @@ export const getAllUser = asyncHandler(async (req, res) => {
         limit,
     };
     let filterUsers = await userModel.paginate({}, options)
-    return res.json(filterUsers)
+    return res.status(200).json(filterUsers)
 })
 
 export const getUserById = asyncHandler(async (req, res) => {

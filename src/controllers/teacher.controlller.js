@@ -12,7 +12,7 @@ export const getAllTeacher = asyncHandler(async (req, res) => {
         populate,
     };
     let filterTeachers = await teacherModel.paginate({}, options)
-    return res.json(filterTeachers)
+    return res.status(200).json(filterTeachers)
 })
 
 export const getTeacherById = asyncHandler(async (req, res) => {
