@@ -5,6 +5,7 @@ import redisClient from '../redis/index.js';
  * /api/stock?maxQuantity=20&minQuantity=10
  */
 export const getAllCourses = asyncHandler(async (req, res) => {
+    console.log('Fetching all courses');
     // const courseCacheKey = 'courses';
 
     // const cacheCourses = await redisClient.get(courseCacheKey)

@@ -7,18 +7,18 @@ import teacherRoute from './routes/teacher.route.js';
 import stockRoute from './routes/stock.route.js';
 import { dbConnect } from './database/db.js';
 import courseRoute from './routes/course.route.js';
-import { authenticate, CacheInterceptor, handleError } from './middlewares/index.js';
+import { authenticate, CacheInterceptor, cacheMiddleware, handleError, invalidateCache } from './middlewares/index.js';
 import morgan from 'morgan';
 import cors from 'cors';
 import authRoute from './routes/auth.route.js';
 import redisClient from './redis/index.js';
 
 
-dbConnect().catch((err) => {
+await dbConnect().catch((err) => {
     console.log(err)
 })
 
-redisClient.connect().catch((err) => {
+await redisClient.connect().catch((err) => {
     console.log(err)
 })
 
@@ -29,10 +29,10 @@ app.use(bodyParser.json())
 app.use(morgan('combined'))
 
 
-app.use('/api/users', authenticate, CacheInterceptor(60 * 10), userRoute);
-app.use('/api/teachers', authenticate, CacheInterceptor(60 * 10), teacherRoute);
-app.use('/api/stocks', authenticate, CacheInterceptor(60 * 10), stockRoute);
-app.use('/api/courses', authenticate, CacheInterceptor(60 * 10), courseRoute);
+app.use('/api/users', authenticate, cacheMiddleware, CacheInterceptor(60 * 10), invalidateCache, userRoute);
+app.use('/api/teachers', authenticate, cacheMiddleware, CacheInterceptor(60 * 10), invalidateCache, teacherRoute);
+app.use('/api/stocks', authenticate, cacheMiddleware, CacheInterceptor(60 * 10), invalidateCache, stockRoute);
+app.use('/api/courses', authenticate, cacheMiddleware, CacheInterceptor(60 * 10), invalidateCache, courseRoute);
 
 app.use('/api/auth', authRoute);
 
