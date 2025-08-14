@@ -78,6 +78,7 @@ export const authenticate = asyncHandler(async (req, res, next) => {
     next()
 })
 
+// Cache Interceptor
 export const CacheInterceptor = (ttl) => responseHandler()
     .for((req) => req.method == 'GET')
     .if((res) => {
