@@ -13,7 +13,6 @@ export const getAllStock = asyncHandler(async (req, res) => {
         populate,
     };
     let filterStocks = await stockModel.paginate({}, options);
-
     return res.status(200).json(filterStocks);
 })
 

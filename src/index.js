@@ -12,6 +12,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import authRoute from './routes/auth.route.js';
 import redisClient from './redis/index.js';
+import fileRoute from './routes/file.route.js';
 
 
 await dbConnect().catch((err) => {
@@ -57,6 +58,8 @@ app.use('/api/courses',
     CacheInterceptor(60 * 10),
     invalidateCache,
     courseRoute);
+
+app.use('/api/files', fileRoute);
 
 // Auth
 app.use('/api/auth',

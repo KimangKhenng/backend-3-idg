@@ -5,15 +5,6 @@ import redisClient from '../redis/index.js';
  * /api/stock?maxQuantity=20&minQuantity=10
  */
 export const getAllCourses = asyncHandler(async (req, res) => {
-    console.log('Fetching all courses');
-    // const courseCacheKey = 'courses';
-
-    // const cacheCourses = await redisClient.get(courseCacheKey)
-
-    // if (cacheCourses) {
-    //     return res.json(JSON.parse(cacheCourses));
-    // }
-
     const limit = req.query.limit || 10
     const page = req.query.page || 1
     const populate = req.query.populate || ''
@@ -23,9 +14,6 @@ export const getAllCourses = asyncHandler(async (req, res) => {
         populate,
     };
     const courses = await courseModel.paginate({}, options);
-    // await redisClient.set(courseCacheKey, JSON.stringify(courses), {
-    //     EX: 60 * 10 // Cache for 10 minutes
-    // });
     return res.status(200).json(courses);
 });
 

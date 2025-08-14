@@ -91,7 +91,7 @@ export const authenticate = asyncHandler(async (req, res, next) => {
 
 // Cache Interceptor
 export const CacheInterceptor = (ttl) => responseHandler()
-    .for((req) => req.method == 'GET')
+    .for((req) => req.method === 'GET')
     .if((res) => {
         const codes = [200, 201, 202, 203, 204]
         return codes.includes(res.statusCode);
@@ -104,7 +104,7 @@ export const CacheInterceptor = (ttl) => responseHandler()
 
 export const cacheMiddleware = asyncHandler(async (req, res, next) => {
     const { originalUrl } = req
-    if (req.method == 'GET') {
+    if (req.method === 'GET') {
         const data = await redisClient.get(originalUrl)
         if (data !== null) {
             return res.json(JSON.parse(data))
@@ -127,4 +127,6 @@ export const invalidateCache = responseHandler().for(
             await redisClient.del(key)
         }
     })
+
+
 
