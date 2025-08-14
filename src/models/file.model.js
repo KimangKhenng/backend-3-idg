@@ -3,15 +3,15 @@ import mongoose from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 const fileSchema = new mongoose.Schema({
-    name: {
+    filename: {
         type: String,
         required: true
     },
-    size: {
-        type: Number,
-        required: true
-    },
-    originalName: {
+    // size: {
+    //     type: Number,
+    //     required: true
+    // },
+    originalname: {
         type: String,
         required: true
     },
@@ -19,7 +19,7 @@ const fileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    mimeType: {
+    mimetype: {
         type: String,
         required: true
     },
