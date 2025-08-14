@@ -7,7 +7,7 @@ import teacherRoute from './routes/teacher.route.js';
 import stockRoute from './routes/stock.route.js';
 import { dbConnect } from './database/db.js';
 import courseRoute from './routes/course.route.js';
-import { authenticate, CacheInterceptor, cacheMiddleware, handleError, invalidateCache } from './middlewares/index.js';
+import { authenticate, CacheInterceptor, cacheMiddleware, handleError, invalidateCache, limiter } from './middlewares/index.js';
 import morgan from 'morgan';
 import cors from 'cors';
 import authRoute from './routes/auth.route.js';
@@ -29,12 +29,39 @@ app.use(bodyParser.json())
 app.use(morgan('combined'))
 
 
-app.use('/api/users', authenticate, cacheMiddleware, CacheInterceptor(60 * 10), invalidateCache, userRoute);
-app.use('/api/teachers', authenticate, cacheMiddleware, CacheInterceptor(60 * 10), invalidateCache, teacherRoute);
-app.use('/api/stocks', authenticate, cacheMiddleware, CacheInterceptor(60 * 10), invalidateCache, stockRoute);
-app.use('/api/courses', authenticate, cacheMiddleware, CacheInterceptor(60 * 10), invalidateCache, courseRoute);
+app.use('/api/users',
+    limiter(60 * 1000, 30), // 1 minute, 30 requests
+    authenticate,
+    cacheMiddleware,
+    CacheInterceptor(60 * 10),
+    invalidateCache,
+    userRoute);
+app.use('/api/teachers',
+    limiter(60 * 1000, 60), // 1 minute, 60ß requests
+    authenticate,
+    cacheMiddleware,
+    CacheInterceptor(60 * 10),
+    invalidateCache,
+    teacherRoute);
+app.use('/api/stocks',
+    limiter(60 * 1000, 30), // 1 minute, 30 requests
+    authenticate,
+    cacheMiddleware,
+    CacheInterceptor(60 * 10),
+    invalidateCache,
+    stockRoute);
+app.use('/api/courses',
+    limiter(60 * 1000, 30), // 1 minute, 30 requests
+    authenticate,
+    cacheMiddleware,
+    CacheInterceptor(60 * 10),
+    invalidateCache,
+    courseRoute);
 
-app.use('/api/auth', authRoute);
+// Auth
+app.use('/api/auth',
+    limiter(60 * 60 * 1000, 3), // 1 hour, 3 requests
+    authRoute);
 
 app.use(handleError)
 

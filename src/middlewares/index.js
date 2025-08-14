@@ -4,6 +4,17 @@ import asyncHandler from 'express-async-handler'
 import { userModel } from '../models/user.model.js';
 import redisClient from '../redis/index.js';
 import { responseHandler } from 'express-intercept';
+import rateLimit from 'express-rate-limit';
+import { RedisStore } from 'rate-limit-redis'
+
+export const limiter = (ttl, request) => rateLimit({
+    windowMs: ttl, // 1 minute
+    max: request, // Limit each IP to 30 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.',
+    store: new RedisStore({
+        sendCommand: (...args) => redisClient.sendCommand(args),
+    })
+});
 
 export function teacherMiddleware(req, res, next) {
     if (req.query.minYear) {
