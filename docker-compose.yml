@@ -1,16 +1,30 @@
 services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    depends_on:
+      - cadt-express
+    environment:
+      - EXPRESS_HOST_1=express-3-idg-cadt-express-1
+      - EXPRESS_HOST_2=express-3-idg-cadt-express-2
+      - EXPRESS_HOST_3=express-3-idg-cadt-express-3
+      - EXPRESS_HOST_4=express-3-idg-cadt-express-4
+      - EXPRESS_HOST_5=express-3-idg-cadt-express-5
+      - EXPRESS_PORT=3000
+      - NGINX_SERVER_NAME=localhost
+      - NGINX_MAX_BODY=100M
+    ports:
+      - 3000:3000
   cadt-express:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: cadt-express
-    ports:
-      - "3000:3000"
     volumes:
       - ./src:/app/src
       - .env:/app/.env
-    depends_on:
-      - cadt-db
+    scale: 5
+
   cadt-db:
     image: mongo:8.0.12-noble
     container_name: cadt-db

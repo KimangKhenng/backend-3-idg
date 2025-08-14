@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler'
 
 
 export const getAllTeacher = asyncHandler(async (req, res) => {
+
     const limit = req.query.limit || 10
     const page = req.query.page || 1
     const populate = req.query.populate || ''
