@@ -3,7 +3,7 @@ import multer from "multer";
 import { Client } from 'minio';
 import { MinioStorageEngine } from '@namatery/multer-minio';
 
-const minioClient = new Client({
+export const minioClient = new Client({
     port: 9000,
     endPoint: 'cadt-file-server',
     accessKey: process.env.MINIO_ROOT_USER,
@@ -12,7 +12,6 @@ const minioClient = new Client({
 });
 
 const options = {
-    path: '/',
     region: 'us-east-1',
     bucket: {
         init: true,
@@ -21,7 +20,7 @@ const options = {
     },
     object: {
         name: (req, file) => {
-            return `${new Date()}-${file.originalname}`;
+            return `${Date.now()}-${file.originalname}`;
         },
         useOriginalFilename: false,
     },

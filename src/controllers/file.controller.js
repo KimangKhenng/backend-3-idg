@@ -1,3 +1,4 @@
+import { minioClient } from "../middlewares/multer.js";
 import { fileModel } from "../models/file.model.js";
 
 export const uploadSingleFile = async (req, res) => {
@@ -16,4 +17,15 @@ export const uploadMultiple = async (req, res) => {
     const fileModels = files.map(file => new fileModel(file));
     await Promise.all(fileModels.map(fileModel => fileModel.save()));
     res.json(files);
+}
+
+export const getFileById = async (req, res) => {
+    const fileId = req.params.id;
+    const file = await fileModel.findById(fileId);
+    const fileStream = await minioClient.getObject(file.bucket, file.filename);
+    res.set({
+        'Content-Type': file.mimetype,
+        'Content-Disposition': `attachment; filename="${file.originalname}"`
+    });
+    return fileStream.pipe(res);
 }
