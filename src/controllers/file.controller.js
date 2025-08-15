@@ -13,7 +13,7 @@ export const uploadMultiple = async (req, res) => {
     if (!files || files.length === 0) {
         return res.status(400).json({ message: "No files uploaded" });
     }
-    console.log(files)
+    // console.log(files)
     const fileModels = files.map(file => new fileModel(file));
     await Promise.all(fileModels.map(fileModel => fileModel.save()));
     res.json(files);
@@ -28,4 +28,14 @@ export const getFileById = async (req, res) => {
         'Content-Disposition': `attachment; filename="${file.originalname}"`
     });
     return fileStream.pipe(res);
+}
+
+export const deleteFileById = async (req, res) => {
+    const fileId = req.params.id;
+    const file = await fileModel.findById(fileId);
+    if (!file) {
+        return res.status(404).json({ message: "File not found" });
+    }
+    await minioClient.removeObject(file.bucket, file.filename, {})
+    return res.status(200).json({ message: "File deleted successfully" });
 }
