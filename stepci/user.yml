@@ -1,0 +1,43 @@
+version: "1.1"
+name: Create User
+env:
+  host: localhost:3000
+tests:
+  create-user:
+    steps:
+      - name: POST user
+        http:
+          url: http://${{env.host}}/api/users
+          method: POST
+          json:
+            name: ${{ finance.accountName | fake }}
+            username: ${{ internet.userName | fake }}
+            age: 15
+            role: "admin"
+            email: ${{ internet.email | fake }}
+            password: "password123"
+          check:
+            status: /^20/
+  create-user-fail:
+    steps:
+      - name: POST user bad data
+        http:
+          url: http://${{env.host}}/api/users
+          method: POST
+          json:
+            name: ${{ | naughtystring }}
+            username: kkk
+            age: -15
+            role: ${{ | naughtystring }}
+            email: ${{ | naughtystring }}
+            password: "234"
+          check:
+            status: /^40/
+  create-user-no-body:
+    steps:
+      - name: POST user no body
+        http:
+          url: http://${{env.host}}/api/users
+          method: POST
+          check:
+            status: /^40/

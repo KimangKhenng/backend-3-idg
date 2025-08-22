@@ -38,8 +38,14 @@ export const createUserValidator = checkSchema({
     },
     role: {
         isIn: {
-            options: ["member", "admin", "editor"]
+            options: [["member", "admin", "editor"]]
         },
         errorMessage: "Role must be among member, admin, editor"
+    },
+    password: {
+        isLength: {
+            options: { min: 8 }
+        },
+        errorMessage: "Password must be at least 8 characters"
     }
 })

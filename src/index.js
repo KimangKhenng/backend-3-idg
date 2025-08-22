@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/users',
     limiter(60 * 1000, 30), // 1 minute, 30 requests
-    authenticate,
+    // authenticate,
     cacheMiddleware,
     CacheInterceptor(60 * 10),
     invalidateCache,
@@ -56,7 +56,7 @@ app.use('/api/stocks',
     stockRoute);
 app.use('/api/courses',
     limiter(60 * 1000, 30), // 1 minute, 30 requests
-    authenticate,
+    // authenticate,
     cacheMiddleware,
     CacheInterceptor(60 * 10),
     invalidateCache,
