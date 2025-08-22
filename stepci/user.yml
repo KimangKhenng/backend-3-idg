@@ -12,6 +12,8 @@ config:
         arrivalRate: 2 # 2 requests per 1 second, 20 requests
 tests:
   create-user:
+    testdata:
+      file: test.csv
     steps:
       - name: Login
         http:
@@ -20,8 +22,8 @@ tests:
           check:
             status: /^20/
           json:
-            username: ${{env.USERNAME}}
-            password: ${{env.PASSWORD}}
+            username: ${{testdata.username}}
+            password: ${{testdata.password}}
           captures:
             accessToken:
               jsonpath: $.accessToken
