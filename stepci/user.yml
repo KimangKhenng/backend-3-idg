@@ -2,17 +2,40 @@ version: "1.1"
 name: Create User
 env:
   host: localhost:3000
+  TOKEN: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODk0NTRiMzgwMGQwZDg0YTA0NTg3NGYiLCJ1c2VybmFtZSI6ImtpbWFuZyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc1NTg0NjQ1OCwiZXhwIjoxNzU1ODg5NjU4fQ.PQ9kbejU4QE_bWc2pu18ScH9ApYeHxN2bse6OKjsk8k"
+config:
+  loadTest:
+    phases:
+      - duration: 2
+        arrivalRate: 20 # Requests per 1 second, 2 request
+      - duration: 10
+        arrivalRate: 2 # 2 requests per 1 second, 20 requests
 tests:
   create-user:
     steps:
+      - name: Login
+        http:
+          url: http://${{env.host}}/api/auth/login
+          method: POST
+          check:
+            status: /^20/
+          json:
+            username: ${{env.USERNAME}}
+            password: ${{env.PASSWORD}}
+          captures:
+            accessToken:
+              jsonpath: $.accessToken
       - name: POST user
         http:
           url: http://${{env.host}}/api/users
           method: POST
+          auth:
+            bearer:
+              token: ${{captures.accessToken}}
           json:
             name: ${{ finance.accountName | fake }}
             username: ${{ internet.userName | fake }}
-            age: 15
+            age: "${{ number.int | fake: {min: 10, max: 100} }}"
             role: "admin"
             email: ${{ internet.email | fake }}
             password: "password123"
@@ -24,6 +47,9 @@ tests:
         http:
           url: http://${{env.host}}/api/users
           method: POST
+          auth:
+            bearer:
+              token: ${{env.TOKEN}}
           json:
             name: ${{ | naughtystring }}
             username: kkk
@@ -39,5 +65,8 @@ tests:
         http:
           url: http://${{env.host}}/api/users
           method: POST
+          auth:
+            bearer:
+              token: ${{env.TOKEN}}
           check:
             status: /^40/
