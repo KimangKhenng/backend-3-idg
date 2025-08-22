@@ -7,10 +7,6 @@ services:
       - cadt-express
     environment:
       - EXPRESS_HOST_1=express-3-idg-cadt-express-1
-      - EXPRESS_HOST_2=express-3-idg-cadt-express-2
-      - EXPRESS_HOST_3=express-3-idg-cadt-express-3
-      - EXPRESS_HOST_4=express-3-idg-cadt-express-4
-      - EXPRESS_HOST_5=express-3-idg-cadt-express-5
       - EXPRESS_PORT=3000
       - NGINX_SERVER_NAME=localhost
       - NGINX_MAX_BODY=100M
@@ -23,7 +19,7 @@ services:
     volumes:
       - ./src:/app/src
       - .env:/app/.env
-    scale: 5
+    scale: 1
   file-server:
     image: minio/minio
     container_name: cadt-file-server
