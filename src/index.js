@@ -13,6 +13,7 @@ import cors from 'cors';
 import authRoute from './routes/auth.route.js';
 import redisClient from './redis/index.js';
 import fileRoute from './routes/file.route.js';
+import { serveSwagger, setupSwagger } from './config/swagger.js';
 
 
 await dbConnect().catch((err) => {
@@ -28,6 +29,9 @@ app.use(cors())
 // POST & PATCH & PUT
 app.use(bodyParser.json())
 app.use(morgan('combined'))
+
+app.use('/docs', serveSwagger, setupSwagger);
+
 
 app.get('/', (req, res) => {
     return res.status(200).json({ 'status': "Server is running" })
@@ -68,6 +72,7 @@ app.use('/api/files', fileRoute);
 app.use('/api/auth',
     // limiter(60 * 60 * 1000, 3), // 1 hour, 3 requests
     authRoute);
+
 
 app.use(handleError)
 
